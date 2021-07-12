@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Thinking in Java (4th ed.)",
+    "authorName": "Eckel, Bruce",
+    "yearReleased": 2006,
+    "bookGenre": "NON_FICTION"
+  },
+  {
+    "title": "The Ultimate Hitchhiker\u0027s Guide to the Galaxy",
+    "authorName": "Adams, Douglas",
+    "yearReleased": 1979,
+    "bookGenre": "FICTION_COMEDY"
+  },
+  {
+    "title": "The Hobbit",
+    "authorName": "Tolkien, J.R.R.",
+    "yearReleased": 1937,
+    "bookGenre": "FICTION_FANTASY"
+  }
+]
