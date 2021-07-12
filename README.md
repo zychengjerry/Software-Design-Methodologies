@@ -17,7 +17,13 @@
 2. RBT
 3. Edit Distance
    
-   
+
+
+## SUP TEST (MID)
+
+Q1: BST / Q2: RBT / Q3: Edit Distance
+
+
     
 ## PAST EXAMs
 
@@ -35,8 +41,5 @@
 
 Q1-Q5: Parser/Tokenizer
 Q6-Q10: Parsing (gson/xml/..)
-
-
-
 
 
