@@ -5,10 +5,6 @@
  */
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /*
 * Please review Lecture 5 Algorithms Part I, slide 20 to complete this task.
 * */
@@ -25,16 +21,17 @@ public class MergeSort {
         int[] R = null; // This array will store the right half of array 
         // TODO: Complete this method
         // START YOUR CODE
-        if (a.length<=1){
-            return;
-        }
-        int mid = a.length/2;
-        L = Arrays.copyOfRange(a,0,mid);
-        R = Arrays.copyOfRange(a,mid,a.length);
-        //System.out.println(L);
-        //System.out.println(R);
-        mergeSort(L);
-        mergeSort(R);
+        // initialize left and right arrays
+        L = new int[Math.round(a.length / 2f)];
+        R = new int[a.length - L.length];
+        // copy data into arrays
+        System.arraycopy(a, 0, L, 0, L.length);
+        System.arraycopy(a, L.length, R, 0, R.length);
+        // if the length of separated array is larger than 1, recursive call
+        if (L.length > 1)
+            mergeSort(L);
+        if (R.length > 1)
+            mergeSort(R);
         // END YOUR CODE
         merge(a,L,R); //Do not modify this part of code.
     }
@@ -52,33 +49,39 @@ public class MergeSort {
         tracker.calltracking(a,L,R); //Do not modify this method. Otherwise, you will be penalized for violation.
         // TODO: Complete this method
         // START YOUR CODE
-        int left = 0;
-        int right = 0;
-        List<Integer> newList = new ArrayList<Integer>();
-        while (left<L.length && right<R.length) {
-            if (L[left]<R[right]){
-                newList.add(L[left]);
-                left += 1;
-            }else {
-                newList.add(R[right]);
-                right += 1;
+        
+        // If left or right is empty, the array a should be identical to the non-empty one
+        if (L.length == 0 || R.length == 0) {
+            return;
+        } else {
+            // x for counter of L, y for counter of R, z for counter of a
+            int x = 0, y = 0, z = 0;
+            do {
+                if (L[x] < R[y]) {
+                    a[z] = L[x];
+                    x++;
+                } else {
+                    a[z] = R[y];
+                    y++;
+                }
+                z++;
+            } while (x < L.length && y < R.length);
+
+            // adding remaining elements to a
+            if (y >= R.length) {
+                while (x < L.length) {
+                    a[z] = L[x];
+                    x++;
+                    z++;
+                }
+            } else {
+                while (y < R.length) {
+                    a[z] = R[y];
+                    y++;
+                    z++;
+                }
             }
-        }
-        if (left>=L.length){
-            for (int i = right; i<R.length; i++){
-                newList.add(R[i]);
-            }
-        }
-        if (right>=R.length){
-            for (int i = left; i<L.length; i++){
-                newList.add(L[i]);
-            }
-        }
-        for (int i = 0; i<newList.size(); i++){
-            a[i] = newList.get(i);
         }
         // END YOUR CODE
-
     }
-
 }

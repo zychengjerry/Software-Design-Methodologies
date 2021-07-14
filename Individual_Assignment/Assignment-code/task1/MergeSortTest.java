@@ -54,4 +54,22 @@ public class MergeSortTest {
         assertArrayEquals(expected,test5);
         
     }
+
+    @Test
+    public void Test6() {
+        int[] test6 = {67, 45};
+        int[] expected = {45, 67};
+
+        MergeSort.mergeSort(test6);
+        assertArrayEquals(expected, test6);
+    }
+
+    @Test
+    public void Test7() {
+        int[] test7 = {67, -45, 0, -242, 5314};
+        int[] expected = {-242, -45, 0, 67, 5314};
+
+        MergeSort.mergeSort(test7);
+        assertArrayEquals(expected, test7);
+    }
 }

@@ -22,38 +22,30 @@ public class MultiplicationAlgorithm {
         // TODO: Complete this method
         tracker.calltracking(x,y); //Do not modify this method. Otherwise, you will be penalized for violation.
         // START YOUR CODE
-        if(x == 0 || y == 0) return 0;
-        if(x < 10 && y < 10) return (x * y);
-        if (x == 1 || y == 1) {
-            if(x == 1) return y;
-            return x;
+        long digit_length = Long.toString(x).length();
+
+        if (digit_length == 1) {
+            return x * y;
+        } else {
+            // half of the number length, use number rounding here
+            long half_length =  Math.round(digit_length / 2d);
+            long multiplier = (long) Math.pow(10,half_length);
+            long b = x % multiplier;
+            long d = y % multiplier;
+            long a = (x - b) / multiplier;
+            long c = (y - d) / multiplier;
+
+            // recursive calculate the a * c
+            long axc = KMultiply(a, c);
+            // recursive calculate the b * d
+            long bxd = KMultiply(b, d);
+            // recursive calculate the (a + b) * (c + d)
+            long a_bxc_d = KMultiply(a + b, c + d);
+            // calculate a * d - c * b by (a + b) * (c + d) - a * c - b * d
+            long axd_cxb = a_bxc_d - axc - bxd;
+
+            return ((long) (axc * Math.pow(10, half_length * 2))) + axd_cxb * multiplier + bxd;
         }
-
-        long biggerNum = Math.max(x, y);
-        long smallerNum = Math.min(x, y);
-        String bigNum = Long.toString(biggerNum);
-        String smallNum = Long.toString(smallerNum);
-        int bigLen = bigNum.length();
-        int smallLen = smallNum.length();
-
-        int m = Math.min(bigLen/2, smallLen);
-        int n = 2 * m;
-
-        StringBuilder numStr = new StringBuilder();
-        numStr.append(smallNum);
-        int n1 = bigLen - smallLen;
-        for (int i = 0; i < n1; i++) {
-            numStr = numStr.insert(0, "0");
-        }
-
-        long a = Long.parseLong(bigNum.substring(0, bigLen-m));
-        long b = Long.parseLong(bigNum.substring(bigLen-m));
-        long c = Long.parseLong(numStr.substring(0, numStr.length()-m));
-        long d = Long.parseLong(numStr.substring(numStr.length()-m, numStr.length()));
-
-        return (long) (Math.pow(10, n) * KMultiply(a, c) + Math.pow(10, m) * (KMultiply(a, d) + KMultiply(b, c)) + KMultiply(b, d));
-
         // END YOUR CODE
     }
-
 }

@@ -48,4 +48,19 @@ public class KMultiplyTest {
         
     }
 
+    @Test
+    public void Test6() {
+
+        long x = 7619535;
+        long y = 9457546;
+        assertEquals(72062102761110L, MultiplicationAlgorithm.KMultiply(x, y));
+    }
+
+    @Test
+    public void Test7() {
+
+        int x = 10;
+        int y = 10;
+        assertEquals(100, MultiplicationAlgorithm.KMultiply(x, y));
+    }
 }

@@ -38,4 +38,24 @@ public class EditDistanceTest {
         assertEquals(EditDistance.minDistance(str1,str2), 18);
     }
 
+    @Test
+    public void Test6() {
+        String str1 = "";
+        String str2 = "";
+        assertEquals(EditDistance.minDistance(str1, str2), 0);
+    }
+
+    @Test
+    public void Test7() {
+        String str1 = "ab";
+        String str2 = "";
+        assertEquals(EditDistance.minDistance(str1, str2), 2);
+    }
+
+    @Test
+    public void Test8() {
+        String str1 = "ab";
+        String str2 = "abc";
+        assertEquals(EditDistance.minDistance(str1, str2), 1);
+    }
 }

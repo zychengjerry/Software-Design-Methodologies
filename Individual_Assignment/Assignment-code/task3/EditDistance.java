@@ -9,7 +9,10 @@
  * Please review Lecture 7 Algorithms Part III, slides 10-14 to complete this task.
  * */
 
-import java.util.Arrays;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Collections;
 
 /*
 * EditCost defines three character edit costs. INSERT and DELETE will cost 1, and REPLACE will cost 2.
@@ -44,74 +47,61 @@ public class EditDistance {
     public static int minDistance(String seq1, String seq2){
         // TODO: Complete this method
         // START YOUR CODE
-        int lseq1 = seq1.length();
-        int lseq2 = seq2.length();
+        int x_len = seq1.length();
+        int y_len = seq2.length();
+        int iteration = (x_len + 1) * (y_len + 1);
 
-        if (seq1.equals(seq2)) {
-            return 0;
-        }else {
-            if (lseq1==lseq2){
-                int n = 0;
-                for (int i=0;i<lseq1;i++){
-                    if (seq1.charAt(i)!=seq2.charAt(i)){
-                        n++;
-                    }
+        // where the lowest cost from (x,y) to destination is stored
+        HashMap<String, Integer> costTable = new HashMap<>();
+        // initialize values for costTable
+        for (int i = 0; i <= x_len; i++) {
+            for (int j = 0; j <= y_len; j++) {
+                String key = i + "," + j;
+                int cost;
+                if (i == x_len && j == y_len) {
+                    cost = 0;
+                } else {
+                    cost = Integer.MAX_VALUE;
                 }
-                return n*EditCost.REPLACE.getEditCost();
-            }else {
-                int n_re, n_de, n_in= 0;
-                String maxStr = (seq1.length() >= seq2.length()) ? seq1 : seq2;
-                String minStr = (seq1.length() < seq2.length()) ? seq1 : seq2;
-                String maxSubStr = minStr;
-                int length = minStr.length();
-
-                for (int i = 0; i < length; i++) {
-
-                    for (int x = 0, y = length-i; y <= length; x++, y++) {
-                        if (maxStr.contains(minStr.substring(x, y))) {
-                            maxSubStr = minStr.substring(x, y);
-                        }
-                    }
-                }
-
-                for (int i=0;i<maxSubStr.length();i++){
-                    maxStr = maxStr.replaceAll(String.valueOf(maxSubStr.charAt(i)),"%");
-                    minStr = minStr.replaceAll(String.valueOf(maxSubStr.charAt(i)),"%");
-                }
-
-                String[] maxSubStrs = maxStr.split("%");
-                String[] minSubStrs = minStr.split("%");
-                int lenmaxSS = Math.max(maxSubStrs.length,minSubStrs.length);
-                int lenminSS = Math.min(maxSubStrs.length,minSubStrs.length);
-                String[] minDivDistanceList = new String[lenminSS];
-
-                for (int i=0,j=0; i<maxSubStrs.length && j<minSubStrs.length; i++, j++){
-                    int lenMaxSubStrs = maxSubStrs[i].length();
-                    int lenMinSubStrs = minSubStrs[j].length();
-                    n_re = Math.min(lenMaxSubStrs,lenMinSubStrs);
-                    n_de = Math.max(lenMaxSubStrs,lenMinSubStrs) - n_re;
-                    int minDivDistance = n_re*EditCost.REPLACE.getEditCost() + n_de*EditCost.DELETE.getEditCost();
-                    if (i>=j){
-                        minDivDistanceList[i] = String.valueOf(minDivDistance);
-                    }else {
-                        minDivDistanceList[j] = String.valueOf(minDivDistance);
-                    }
-                }
-
-                int minDistance = 0;
-                for (String s : minDivDistanceList) {
-                    minDistance = minDistance + Integer.parseInt(s);
-                }
-                if (maxSubStrs.length>minSubStrs.length){
-                    minDistance = minDistance + maxSubStrs[maxSubStrs.length-1].length()*EditCost.DELETE.getEditCost();
-                }else if (maxSubStrs.length<minSubStrs.length){
-                    minDistance = minDistance + minSubStrs[minSubStrs.length-1].length()*EditCost.DELETE.getEditCost();
-                }
-                return minDistance;
+                costTable.put(key, cost);
             }
         }
-
+        // update values inside costTable
+        for (int i = 0; i < iteration; i++) {
+            for (String s : costTable.keySet()) {
+                // get the current coordinates
+                int x_coordinate = Integer.parseInt(s.split(",")[0]);
+                int y_coordinate = Integer.parseInt(s.split(",")[1]);
+                HashSet<Integer> op_costs = new HashSet<>();
+                // DELETE op
+                if (x_coordinate < Math.abs(x_len)) {
+                    op_costs.add(EditCost.DELETE.getEditCost() +
+                            costTable.get((x_coordinate + 1) + "," + y_coordinate));
+                }
+                // INSERT op
+                if (y_coordinate < Math.abs(y_len)) {
+                    op_costs.add(EditCost.INSERT.getEditCost() +
+                            costTable.get(x_coordinate + "," + (y_coordinate + 1)));
+                }
+                // REPLACE op
+                if (x_coordinate < Math.abs(x_len) && y_coordinate < Math.abs(y_len)) {
+                    // Use existing char to replace (no cost)
+                    if (seq1.charAt(x_coordinate) == seq2.charAt(y_coordinate)) {
+                        op_costs.add(costTable.get((x_coordinate + 1) + "," + (y_coordinate + 1)));
+                    } else {
+                        // Cost time to replace
+                        op_costs.add(EditCost.REPLACE.getEditCost() +
+                                costTable.get((x_coordinate + 1) + "," + (y_coordinate + 1)));
+                    }
+                }
+                // if there is possible operation, update the lowest cost to costTable
+                if (op_costs.size() != 0) {
+                    costTable.put(s, Collections.min(op_costs));
+                }
+            }
+        }
+        // return the lowest cost from (0,0) to destination
+        return costTable.get("0,0");
         // END YOUR CODE
-
     }
 }
