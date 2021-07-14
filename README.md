@@ -13,6 +13,13 @@
 
 ## MID-TERM
 
+1. MergeSort
+2. K-MultiplicationAlgorithm
+3. EditDistance
+
+
+## MID-TERM
+
 1. BST
 2. RBT
 3. Edit Distance
