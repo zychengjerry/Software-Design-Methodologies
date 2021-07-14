@@ -11,7 +11,7 @@
 
 
 
-## MID-TERM
+## INDIVIDUAL ASSIGNMENT
 
 1. MergeSort
 2. K-MultiplicationAlgorithm
